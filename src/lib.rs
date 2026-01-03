@@ -71,7 +71,7 @@
 //! [`net::TcpStream`]: std::net::TcpStream
 //!
 
-#![doc(html_root_url = " https://dan0xe.github.io/bincode-fork/")]
+#![doc(html_root_url = " https://dan0xe.github.io/BincodeF/")]
 #![crate_name = "bincode"]
 #![crate_type = "rlib"]
 
