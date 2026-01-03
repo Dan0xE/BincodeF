@@ -413,11 +413,13 @@ mod derive_with_polluted_scope {
     fn Err() {}
 
     #[derive(bincode::Encode, bincode::Decode)]
+    #[allow(dead_code)]
     struct A {
         a: u32,
     }
 
     #[derive(bincode::Encode, bincode::Decode)]
+    #[allow(dead_code)]
     enum B {
         A,
         B,

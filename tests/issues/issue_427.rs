@@ -6,6 +6,7 @@
 /// Used to store HID-IO data chunks. Will be chunked into individual packets on transmission.
 #[repr(C)]
 #[derive(PartialEq, Eq, Clone, Debug, bincode::Encode)]
+#[allow(dead_code)]
 pub struct HidIoPacketBuffer<const H: usize> {
     /// Type of packet (Continued is automatically set if needed)
     pub ptype: u32,

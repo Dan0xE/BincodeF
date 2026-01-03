@@ -3,8 +3,10 @@
 use bincode::{Decode, Encode};
 
 #[derive(Encode, Decode, Clone)]
+#[allow(dead_code)]
 pub struct A;
 #[derive(Encode, Decode, Clone)]
+#[allow(dead_code)]
 pub struct B<T>
 where
     T: Clone + Encode + Decode<()>,
@@ -13,6 +15,7 @@ where
 }
 
 #[derive(Encode, Decode)]
+#[allow(dead_code)]
 pub struct MyStruct<T>
 where
     T: Clone + Encode + Decode<()>,

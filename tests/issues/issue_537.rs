@@ -3,6 +3,7 @@
 use bincode::{Decode, Encode};
 
 #[derive(Encode, Decode)]
+#[allow(dead_code)]
 struct Foo<Bar = ()> {
     x: Bar,
 }
