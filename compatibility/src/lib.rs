@@ -114,10 +114,10 @@ where
 }
 
 pub fn gen_string(rng: &mut impl Rng) -> String {
-    let len = rng.gen_range(0..100usize);
+    let len = rng.random_range(0..100usize);
     let mut result = String::with_capacity(len * 4);
     for _ in 0..len {
-        result.push(rng.gen_range('\0'..char::MAX));
+        result.push(rng.random_range('\0'..char::MAX));
     }
     result
 }

@@ -15,11 +15,11 @@ pub struct Lcg64Xsh32 {
 
 #[test]
 pub fn test() {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     for _ in 0..1000 {
         crate::test_same(Lcg64Xsh32 {
-            state: rng.gen(),
-            increment: rng.gen(),
+            state: rng.random(),
+            increment: rng.random(),
         });
     }
 }

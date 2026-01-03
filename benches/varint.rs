@@ -1,5 +1,5 @@
 use bincode::config;
-use criterion::{criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, criterion_group, criterion_main};
 use rand::distr::{Distribution, Uniform};
 
 fn slice_varint_u8(c: &mut Criterion) {
