@@ -5,7 +5,7 @@ extern crate std;
 use chrono::{DateTime, Utc};
 use serde::de::DeserializeOwned;
 use std::collections::HashMap;
-use std::prelude::rust_2021::*;
+use std::prelude::rust_2024::*;
 use uuid::Uuid;
 
 #[derive(serde_derive::Serialize, serde_derive::Deserialize, PartialEq, Eq, Debug)]
