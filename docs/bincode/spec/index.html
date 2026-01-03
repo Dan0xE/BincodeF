@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Serialization Specification"><title>bincode::spec - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="bincode" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module spec</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../bincode/index.html">bincode</a><span class="version">2.0.2</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module spec</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#serialization-specification" title="Serialization Specification">Serialization Specification</a><ul><li><a href="#definitions" title="Definitions">Definitions</a></li><li><a href="#endianness" title="Endianness">Endianness</a></li><li><a href="#basic-types" title="Basic Types">Basic Types</a></li><li><a href="#intencoding" title="IntEncoding">IntEncoding</a></li><li><a href="#enums" title="Enums">Enums</a></li></ul></li><li><a href="#collections" title="Collections">Collections</a><ul><li><a href="#general-collection-serialization" title="General Collection Serialization">General Collection Serialization</a></li></ul></li><li><a href="#string-and-str" title="String and &#38;str">String and &amp;str</a><ul><li><a href="#encoding-principles" title="Encoding Principles">Encoding Principles</a></li></ul></li><li><a href="#arrays" title="Arrays">Arrays</a><ul><li><a href="#tupleencoding" title="TupleEncoding">TupleEncoding</a></li><li><a href="#structencoding" title="StructEncoding">StructEncoding</a></li><li><a href="#enumencoding" title="EnumEncoding">EnumEncoding</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate bincode</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">bincode</a></div><h1>Module <span>spec</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/bincode/lib.rs.html#224">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="serialization-specification"><a class="doc-anchor" href="#serialization-specification">§</a>Serialization Specification</h2>
+<p><em>NOTE</em>: This specification is primarily defined in the context of Rust, but aims to be implementable across different programming languages.</p>
+<h3 id="definitions"><a class="doc-anchor" href="#definitions">§</a>Definitions</h3>
+<ul>
+<li><strong>Variant</strong>: A specific constructor or case of an enum type.</li>
+<li><strong>Variant Payload</strong>: The associated data of a specific enum variant.</li>
+<li><strong>Discriminant</strong>: A unique identifier for an enum variant, typically represented as an integer.</li>
+<li><strong>Basic Types</strong>: Primitive types that have a direct, well-defined binary representation.</li>
+</ul>
+<h3 id="endianness"><a class="doc-anchor" href="#endianness">§</a>Endianness</h3>
+<p>By default, this serialization format uses little-endian byte order for basic numeric types. This means multi-byte values are encoded with their least significant byte first.</p>
+<p>Endianness can be configured with the following methods, allowing for big-endian serialization when required:</p>
+<ul>
+<li><a href="https://docs.rs/bincode/2/bincode/config/struct.Configuration.html#method.with_big_endian"><code>with_big_endian</code></a></li>
+<li><a href="https://docs.rs/bincode/2/bincode/config/struct.Configuration.html#method.with_little_endian"><code>with_little_endian</code></a></li>
+</ul>
+<h4 id="byte-order-considerations"><a class="doc-anchor" href="#byte-order-considerations">§</a>Byte Order Considerations</h4>
+<ul>
+<li>Multi-byte values (integers, floats) are affected by endianness</li>
+<li>Single-byte values (u8, i8) are not affected</li>
+<li>Struct and collection serialization order is not changed by endianness</li>
+</ul>
+<h3 id="basic-types"><a class="doc-anchor" href="#basic-types">§</a>Basic Types</h3><h4 id="boolean-encoding"><a class="doc-anchor" href="#boolean-encoding">§</a>Boolean Encoding</h4>
+<ul>
+<li>Encoded as a single byte</li>
+<li><code>false</code> is represented by <code>0</code></li>
+<li><code>true</code> is represented by <code>1</code></li>
+<li>During deserialization, values other than 0 and 1 will result in an error <a href="https://docs.rs/bincode/2/bincode/error/enum.DecodeError.html#variant.InvalidBooleanValue"><code>DecodeError::InvalidBooleanValue</code></a></li>
+</ul>
+<h4 id="numeric-types"><a class="doc-anchor" href="#numeric-types">§</a>Numeric Types</h4>
+<ul>
+<li>Encoded based on the configured <a href="#intencoding">IntEncoding</a></li>
+<li>Signed integers use 2’s complement representation</li>
+<li>Floating point types use IEEE 754-2008 standard
+<ul>
+<li><code>f32</code>: 4 bytes (binary32)</li>
+<li><code>f64</code>: 8 bytes (binary64)</li>
+</ul>
+</li>
+</ul>
+<h5 id="floating-point-special-values"><a class="doc-anchor" href="#floating-point-special-values">§</a>Floating Point Special Values</h5>
+<ul>
+<li>Subnormal numbers are preserved
+<ul>
+<li>Also known as denormalized numbers</li>
+<li>Maintain their exact bit representation</li>
+</ul>
+</li>
+<li><code>NaN</code> values are preserved
+<ul>
+<li>Both quiet and signaling <code>NaN</code> are kept as-is</li>
+<li>Bit pattern of <code>NaN</code> is maintained exactly</li>
+</ul>
+</li>
+<li>No normalization or transformation of special values occurs</li>
+<li>Serialization and deserialization do not alter the bit-level representation</li>
+<li>Consistent with IEEE 754-2008 standard for floating-point arithmetic</li>
+</ul>
+<h4 id="character-encoding"><a class="doc-anchor" href="#character-encoding">§</a>Character Encoding</h4>
+<ul>
+<li><code>char</code> is encoded as a 32-bit unsigned integer representing its Unicode Scalar Value</li>
+<li>Valid Unicode Scalar Value range:
+<ul>
+<li>0x0000 to 0xD7FF (Basic Multilingual Plane)</li>
+<li>0xE000 to 0x10FFFF (Supplementary Planes)</li>
+</ul>
+</li>
+<li>Surrogate code points (0xD800 to 0xDFFF) are not valid</li>
+<li>Invalid Unicode characters can be acquired via unsafe code, this is handled as:
+<ul>
+<li>during serialization: data is written as-is</li>
+<li>during deserialization: an error is raised <a href="https://docs.rs/bincode/2/bincode/error/enum.DecodeError.html#variant.InvalidCharEncoding"><code>DecodeError::InvalidCharEncoding</code></a></li>
+</ul>
+</li>
+<li>No additional metadata or encoding scheme beyond the raw code point value</li>
+</ul>
+<p>All tuples have no additional bytes, and are encoded in their specified order, e.g.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>tuple = (u32::min_value(), i32::max_value()); <span class="comment">// 8 bytes
+</span><span class="kw">let </span>encoded = bincode::encode_to_vec(tuple, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="comment">// 4 bytes for first type:  u32
+    </span><span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">127 </span><span class="comment">// 4 bytes for second type: i32
+</span>]);</code></pre></div><h3 id="intencoding"><a class="doc-anchor" href="#intencoding">§</a>IntEncoding</h3>
+<p>Bincode currently supports 2 different types of <code>IntEncoding</code>. With the default config, <code>VarintEncoding</code> is selected.</p>
+<h4 id="varintencoding"><a class="doc-anchor" href="#varintencoding">§</a>VarintEncoding</h4>
+<p>Encoding an unsigned integer v (of any type excepting u8/i8) works as follows:</p>
+<ol>
+<li>If <code>u &lt; 251</code>, encode it as a single byte with that value.</li>
+<li>If <code>251 &lt;= u &lt; 2**16</code>, encode it as a literal byte 251, followed by a u16 with value <code>u</code>.</li>
+<li>If <code>2**16 &lt;= u &lt; 2**32</code>, encode it as a literal byte 252, followed by a u32 with value <code>u</code>.</li>
+<li>If <code>2**32 &lt;= u &lt; 2**64</code>, encode it as a literal byte 253, followed by a u64 with value <code>u</code>.</li>
+<li>If <code>2**64 &lt;= u &lt; 2**128</code>, encode it as a literal byte 254, followed by a u128 with value <code>u</code>.</li>
+</ol>
+<p><code>usize</code> is being encoded/decoded as a <code>u64</code> and <code>isize</code> is being encoded/decoded as a <code>i64</code>.</p>
+<p>See the documentation of <a href="https://docs.rs/bincode/2/bincode/config/struct.Configuration.html#method.with_variable_int_encoding">VarintEncoding</a> for more information.</p>
+<h4 id="fixintencoding"><a class="doc-anchor" href="#fixintencoding">§</a>FixintEncoding</h4>
+<ul>
+<li>Fixed size integers are encoded directly</li>
+<li>Enum discriminants are encoded as u32</li>
+<li>Lengths and usize are encoded as u64</li>
+</ul>
+<p>See the documentation of <a href="https://docs.rs/bincode/2/bincode/config/struct.Configuration.html#method.with_fixed_int_encoding">FixintEncoding</a> for more information.</p>
+<h3 id="enums"><a class="doc-anchor" href="#enums">§</a>Enums</h3>
+<p>Enums are encoded with their variant first, followed by optionally the variant fields. The variant index is based on the <code>IntEncoding</code> during serialization.</p>
+<p>Both named and unnamed fields are serialized with their values only, and therefore encode to the same value.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(bincode::Encode)]
+</span><span class="kw">pub enum </span>SomeEnum {
+    A,
+    B(u32),
+    C { value: u32 },
+}
+
+<span class="comment">// SomeEnum::A
+</span><span class="kw">let </span>encoded = bincode::encode_to_vec(SomeEnum::A, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="comment">// first variant, A
+    // no extra bytes because A has no fields
+</span>]);
+
+<span class="comment">// SomeEnum::B(0)
+</span><span class="kw">let </span>encoded = bincode::encode_to_vec(SomeEnum::B(<span class="number">0</span>), bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="comment">// second variant, B
+    </span><span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0  </span><span class="comment">// B has 1 unnamed field, which is an u32, so 4 bytes
+</span>]);
+
+<span class="comment">// SomeEnum::C { value: 0u32 }
+</span><span class="kw">let </span>encoded = bincode::encode_to_vec(SomeEnum::C { value: <span class="number">0u32 </span>}, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="comment">// third variant, C
+    </span><span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0  </span><span class="comment">// C has 1 named field which is a u32, so 4 bytes
+</span>]);</code></pre></div><h4 id="options"><a class="doc-anchor" href="#options">§</a>Options</h4>
+<p><code>Option&lt;T&gt;</code> is always serialized using a single byte for the discriminant, even in <code>Fixint</code> encoding (which normally uses a <code>u32</code> for discriminant).</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>data: <span class="prelude-ty">Option</span>&lt;u32&gt; = <span class="prelude-val">Some</span>(<span class="number">123</span>);
+<span class="kw">let </span>encoded = bincode::encode_to_vec(data, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">1</span>, <span class="number">123</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0  </span><span class="comment">// the Some(..) tag is the leading 1
+</span>]);
+
+<span class="kw">let </span>data: <span class="prelude-ty">Option</span>&lt;u32&gt; = <span class="prelude-val">None</span>;
+<span class="kw">let </span>encoded = bincode::encode_to_vec(data, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">0 </span><span class="comment">// the None tag is simply 0
+</span>]);</code></pre></div><h2 id="collections"><a class="doc-anchor" href="#collections">§</a>Collections</h2><h3 id="general-collection-serialization"><a class="doc-anchor" href="#general-collection-serialization">§</a>General Collection Serialization</h3>
+<p>Collections are encoded with their length value first, followed by each entry of the collection. The length value is based on the configured <code>IntEncoding</code>.</p>
+<h4 id="serialization-considerations"><a class="doc-anchor" href="#serialization-considerations">§</a>Serialization Considerations</h4>
+<ul>
+<li>Length is always serialized first</li>
+<li>Entries are serialized in the order they are returned from the iterator implementation.
+<ul>
+<li>Iteration order depends on the collection type
+<ul>
+<li>Ordered collections (e.g., <code>Vec</code>): Iteration from lowest to highest index</li>
+<li>Unordered collections (e.g., <code>HashMap</code>): Implementation-defined iteration order</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Duplicate keys are not checked in bincode, but may be resulting in an error when decoding a container from a list of pairs.</li>
+</ul>
+<h4 id="handling-of-specific-collection-types"><a class="doc-anchor" href="#handling-of-specific-collection-types">§</a>Handling of Specific Collection Types</h4><h5 id="linear-collections-vec-arrays-etc"><a class="doc-anchor" href="#linear-collections-vec-arrays-etc">§</a>Linear Collections (<code>Vec</code>, Arrays, etc.)</h5>
+<ul>
+<li>Serialized by iterating from lowest to highest index</li>
+<li>Length prefixed</li>
+<li>Each item serialized sequentially</li>
+</ul>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>list = <span class="macro">vec!</span>[<span class="number">0u8</span>, <span class="number">1u8</span>, <span class="number">2u8</span>];
+<span class="kw">let </span>encoded = bincode::encode_to_vec(list, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="comment">// length of 3u64
+    </span><span class="number">0</span>, <span class="comment">// entry 0
+    </span><span class="number">1</span>, <span class="comment">// entry 1
+    </span><span class="number">2</span>, <span class="comment">// entry 2
+</span>]);</code></pre></div><h5 id="key-value-collections-hashmap-etc"><a class="doc-anchor" href="#key-value-collections-hashmap-etc">§</a>Key-Value Collections (<code>HashMap</code>, etc.)</h5>
+<ul>
+<li>Serialized as a sequence of key-value pairs</li>
+<li>Iteration order is implementation-defined</li>
+<li>Each entry is a tuple of (key, value)</li>
+</ul>
+<h4 id="special-collection-considerations"><a class="doc-anchor" href="#special-collection-considerations">§</a>Special Collection Considerations</h4>
+<ul>
+<li>Bincode will serialize the entries based on the iterator order.</li>
+<li>Deserialization is deterministic but the collection implementation might not guarantee the same order as serialization.</li>
+</ul>
+<p><strong>Note</strong>: Fixed-length arrays do not have their length encoded. See <a href="#arrays">Arrays</a> for details.</p>
+<h2 id="string-and-str"><a class="doc-anchor" href="#string-and-str">§</a>String and &amp;str</h2><h3 id="encoding-principles"><a class="doc-anchor" href="#encoding-principles">§</a>Encoding Principles</h3>
+<ul>
+<li>Strings are encoded as UTF-8 byte sequences</li>
+<li>No null terminator is added</li>
+<li>No Byte Order Mark (BOM) is written</li>
+<li>Unicode non-characters are preserved</li>
+</ul>
+<h4 id="encoding-details"><a class="doc-anchor" href="#encoding-details">§</a>Encoding Details</h4>
+<ul>
+<li>Length is encoded first using the configured <code>IntEncoding</code></li>
+<li>Raw UTF-8 bytes follow the length</li>
+<li>Supports the full range of valid UTF-8 sequences</li>
+<li><code>U+0000</code> and other code points can appear freely within the string</li>
+</ul>
+<h4 id="unicode-handling"><a class="doc-anchor" href="#unicode-handling">§</a>Unicode Handling</h4>
+<ul>
+<li>During serialization, the string is encoded as a sequence of the given bytes.
+<ul>
+<li>Rust strings are UTF-8 encoded by default, but this is not enforced by bincode</li>
+</ul>
+</li>
+<li>No normalization or transformation of text</li>
+<li>If an invalid UTF-8 sequence is encountered during decoding, an <a href="https://docs.rs/bincode/2/bincode/error/enum.DecodeError.html#variant.Utf8"><code>DecodeError::Utf8</code></a> error is raised</li>
+</ul>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>str = <span class="string">"Hello 🌍"</span>; <span class="comment">// Mixed ASCII and Unicode
+
+</span><span class="kw">let </span>encoded = bincode::encode_to_vec(str, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="comment">// length of the string, 10 bytes
+    </span><span class="string">b'H'</span>, <span class="string">b'e'</span>, <span class="string">b'l'</span>, <span class="string">b'l'</span>, <span class="string">b'o'</span>, <span class="string">b' '</span>, <span class="number">0xF0</span>, <span class="number">0x9F</span>, <span class="number">0x8C</span>, <span class="number">0x8D </span><span class="comment">// UTF-8 encoded string
+</span>]);</code></pre></div><h4 id="comparison-with-other-types"><a class="doc-anchor" href="#comparison-with-other-types">§</a>Comparison with Other Types</h4>
+<ul>
+<li>Treated similarly to <code>Vec&lt;u8&gt;</code> in serialization</li>
+<li>See <a href="#collections">Collections</a> for more information about length and entry encoding</li>
+</ul>
+<h2 id="arrays"><a class="doc-anchor" href="#arrays">§</a>Arrays</h2>
+<p>Array length is never encoded.</p>
+<p>Note that <code>&amp;[T]</code> is encoded as a <a href="#collections">Collection</a>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>arr: [u8; <span class="number">5</span>] = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>];
+<span class="kw">let </span>encoded = bincode::encode_to_vec(arr, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="comment">// the bytes
+</span>]);
+</code></pre></div>
+<p>This applies to any type <code>T</code> that implements <code>Encode</code>/<code>Decode</code></p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(bincode::Encode)]
+</span><span class="kw">struct </span>Foo {
+    first: u8,
+    second: u8
+};
+
+<span class="kw">let </span>arr: [Foo; <span class="number">2</span>] = [
+    Foo {
+        first: <span class="number">10</span>,
+        second: <span class="number">20</span>,
+    },
+    Foo {
+        first: <span class="number">30</span>,
+        second: <span class="number">40</span>,
+    },
+];
+
+<span class="kw">let </span>encoded = bincode::encode_to_vec(<span class="kw-2">&amp;</span>arr, bincode::config::legacy()).unwrap();
+<span class="macro">assert_eq!</span>(encoded.as_slice(), <span class="kw-2">&amp;</span>[
+    <span class="number">10</span>, <span class="number">20</span>, <span class="comment">// First Foo
+    </span><span class="number">30</span>, <span class="number">40</span>, <span class="comment">// Second Foo
+</span>]);</code></pre></div><h3 id="tupleencoding"><a class="doc-anchor" href="#tupleencoding">§</a>TupleEncoding</h3>
+<p>Tuple fields are serialized in first-to-last declaration order, with no additional metadata.</p>
+<ul>
+<li>No length prefix is added</li>
+<li>Fields are encoded sequentially</li>
+<li>No padding or alignment adjustments are made</li>
+<li>Order of serialization is deterministic and matches the tuple’s declaration order</li>
+</ul>
+<h3 id="structencoding"><a class="doc-anchor" href="#structencoding">§</a>StructEncoding</h3>
+<p>Struct fields are serialized in first-to-last declaration order, with no metadata representing field names.</p>
+<ul>
+<li>No length prefix is added</li>
+<li>Fields are encoded sequentially</li>
+<li>No padding or alignment adjustments are made</li>
+<li>Order of serialization is deterministic and matches the struct’s field declaration order</li>
+<li>Both named and unnamed fields are serialized identically</li>
+</ul>
+<h3 id="enumencoding"><a class="doc-anchor" href="#enumencoding">§</a>EnumEncoding</h3>
+<p>Enum variants are encoded with a discriminant followed by optional variant payload.</p>
+<h4 id="discriminant-allocation"><a class="doc-anchor" href="#discriminant-allocation">§</a>Discriminant Allocation</h4>
+<ul>
+<li>Discriminants are automatically assigned by the derive macro in declaration order
+<ul>
+<li>First variant starts at 0</li>
+<li>Subsequent variants increment by 1</li>
+</ul>
+</li>
+<li>Explicit discriminant indices are currently not supported</li>
+<li>Discriminant is always represented as a <code>u32</code> during serialization. See <a href="#discriminant-representation">Discriminant Representation</a> for more details.</li>
+<li>Maintains the original enum variant semantics during encoding</li>
+</ul>
+<h4 id="variant-payload-encoding"><a class="doc-anchor" href="#variant-payload-encoding">§</a>Variant Payload Encoding</h4>
+<ul>
+<li>Tuple variants: Fields serialized in declaration order</li>
+<li>Struct variants: Fields serialized in declaration order</li>
+<li>Unit variants: No additional data encoded</li>
+</ul>
+<h4 id="discriminant-representation"><a class="doc-anchor" href="#discriminant-representation">§</a>Discriminant Representation</h4>
+<ul>
+<li>Always encoded as a <code>u32</code></li>
+<li>Encoding method depends on the configured <code>IntEncoding</code>
+<ul>
+<li><code>VarintEncoding</code>: Variable-length encoding</li>
+<li><code>FixintEncoding</code>: Fixed 4-byte representation</li>
+</ul>
+</li>
+</ul>
+<h4 id="handling-of-variant-payloads"><a class="doc-anchor" href="#handling-of-variant-payloads">§</a>Handling of Variant Payloads</h4>
+<ul>
+<li>Payload is serialized immediately after the discriminant</li>
+<li>No additional metadata about field names or types</li>
+<li>Payload structure matches the variant’s definition</li>
+</ul>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,9 @@
+(function() {
+    var implementors = Object.fromEntries([["bincode",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"bincode/error/enum.DecodeError.html\" title=\"enum bincode::error::DecodeError\">DecodeError</a>"],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"bincode/error/enum.EncodeError.html\" title=\"enum bincode::error::EncodeError\">EncodeError</a>"],["impl&lt;T&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"struct\" href=\"bincode/serde/struct.BorrowCompat.html\" title=\"struct bincode::serde::BorrowCompat\">BorrowCompat</a>&lt;T&gt;<div class=\"where\">where\n    T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a>,</div>"],["impl&lt;T&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"struct\" href=\"bincode/serde/struct.Compat.html\" title=\"struct bincode::serde::Compat\">Compat</a>&lt;T&gt;<div class=\"where\">where\n    T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a>,</div>"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[1487]}

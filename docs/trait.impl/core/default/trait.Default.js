@@ -1,0 +1,9 @@
+(function() {
+    var implementors = Object.fromEntries([["bincode",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"bincode/enc/write/struct.SizeWriter.html\" title=\"struct bincode::enc::write::SizeWriter\">SizeWriter</a>"],["impl&lt;E, I, L&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"bincode/config/struct.Configuration.html\" title=\"struct bincode::config::Configuration\">Configuration</a>&lt;E, I, L&gt;"],["impl&lt;T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"bincode/serde/struct.BorrowCompat.html\" title=\"struct bincode::serde::BorrowCompat\">BorrowCompat</a>&lt;T&gt;"],["impl&lt;T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.92.0/core/default/trait.Default.html\" title=\"trait core::default::Default\">Default</a> for <a class=\"struct\" href=\"bincode/serde/struct.Compat.html\" title=\"struct bincode::serde::Compat\">Compat</a>&lt;T&gt;"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[1511]}

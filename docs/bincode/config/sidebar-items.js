@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Endianness","IntEncoding"],"fn":["legacy","standard"],"struct":["BigEndian","Configuration","Fixint","Limit","LittleEndian","NoLimit","Varint"],"trait":["Config"]};

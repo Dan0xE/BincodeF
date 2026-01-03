@@ -1,0 +1,2 @@
+createSrcSidebar('[["bincode",["",[["de",[],["decoder.rs","impl_core.rs","impl_tuples.rs","impls.rs","mod.rs","read.rs"]],["enc",[],["encoder.rs","impl_tuples.rs","impls.rs","mod.rs","write.rs"]],["features",[["serde",[],["de_borrowed.rs","de_owned.rs","mod.rs","ser.rs"]]],["derive.rs","impl_alloc.rs","impl_std.rs","mod.rs"]],["varint",[],["decode_signed.rs","decode_unsigned.rs","encode_signed.rs","encode_unsigned.rs","mod.rs"]]],["atomic.rs","config.rs","error.rs","lib.rs","utils.rs"]]]]');
+//{"start":19,"fragment_lengths":[473]}
