@@ -3,6 +3,8 @@ name: Benchmark
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -43,7 +45,7 @@ jobs:
         tool: 'cargo'
         output-file-path: output.txt
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        auto-push: false
+        auto-push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         comment-on-alert: true
         summary-always: true
         alert-threshold: '150%'
