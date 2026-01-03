@@ -10,7 +10,7 @@ authors = [
     "Victor Koenders <bincode@trangar.com>",
 ]
 exclude = ["logo.svg", "examples/*", ".gitignore", ".github/"]
-rust-version = "1.85.0"
+rust-version = "1.86.0"
 
 publish = true
 
