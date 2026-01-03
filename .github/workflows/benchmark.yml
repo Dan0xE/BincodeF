@@ -36,18 +36,17 @@ jobs:
           ${{ runner.os }}-cargo-bench-
 
     - name: Run benchmarks
-      run: cargo bench --all-features --message-format=json | tee benchmark-output.json
+      run: cargo bench --bench varint --bench inline --bench string --all-features -- --output-format bencher | tee output.txt
 
     - name: Store benchmark result
       uses: benchmark-action/github-action-benchmark@v1
       with:
         name: Rust Benchmark
         tool: 'cargo'
-        output-file-path: benchmark-output.json
+        output-file-path: output.txt
         github-token: ${{ secrets.GITHUB_TOKEN }}
         auto-push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         comment-on-alert: true
         summary-always: true
         alert-threshold: '150%'
         fail-on-alert: false
-        alert-comment-cc-users: '@${{ github.actor }}'
