@@ -1,40 +1,60 @@
-{
-  "name": "CIFuzz",
-  "on": [
-    "pull_request"
-  ],
-  "jobs": {
-    "Fuzzing": {
-      "runs-on": "ubuntu-latest",
-      "steps": [
-        {
-          "name": "Build Fuzzers",
-          "id": "build",
-          "uses": "google/oss-fuzz/infra/cifuzz/actions/build_fuzzers@master",
-          "with": {
-            "oss-fuzz-project-name": "bincode",
-            "language": "rust"
-          }
-        },
-        {
-          "name": "Run Fuzzers",
-          "uses": "google/oss-fuzz/infra/cifuzz/actions/run_fuzzers@master",
-          "with": {
-            "oss-fuzz-project-name": "bincode",
-            "fuzz-seconds": 300,
-            "language": "rust"
-          }
-        },
-        {
-          "name": "Upload Crash",
-          "uses": "actions/upload-artifact@v4",
-          "if": "failure() && steps.build.outcome == 'success'",
-          "with": {
-            "name": "artifacts",
-            "path": "./out/artifacts"
-          }
-        }
-      ]
-    }
-  }
-}
+name: Fuzz Testing
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  fuzz:
+    name: Fuzz Testing
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [compat, roundtrip]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@nightly
+
+    - name: Install cargo-fuzz
+      run: cargo install cargo-fuzz
+
+    - name: Cache cargo dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-fuzz-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Build fuzz target
+      run: cargo fuzz build ${{ matrix.target }}
+
+    - name: Run fuzzer
+      run: cargo fuzz run ${{ matrix.target }} -- -max_total_time=300 -max_len=1024
+      continue-on-error: true
+      id: fuzz
+
+    - name: Check for crashes
+      if: steps.fuzz.outcome == 'failure'
+      run: |
+        if [ -d fuzz/artifacts/${{ matrix.target }} ]; then
+          echo "Crashes found in ${{ matrix.target }}!"
+          ls -la fuzz/artifacts/${{ matrix.target }}
+          exit 1
+        fi
+
+    - name: Upload crash artifacts
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: fuzz-artifacts-${{ matrix.target }}
+        path: fuzz/artifacts/${{ matrix.target }}
+        if-no-files-found: ignore
