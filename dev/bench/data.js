@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1767467499221,
+  "lastUpdate": 1767523074716,
   "repoUrl": "https://github.com/Dan0xE/BincodeF",
   "entries": {
     "Rust Benchmark": [
@@ -323,6 +323,114 @@ window.BENCHMARK_DATA = {
             "name": "bufreader_varint_u64",
             "value": 23422,
             "range": "± 110",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "danopperm@gmail.com",
+            "name": "Daniel Oppermann",
+            "username": "Dan0xE"
+          },
+          "committer": {
+            "email": "danopperm@gmail.com",
+            "name": "Daniel Oppermann",
+            "username": "Dan0xE"
+          },
+          "distinct": true,
+          "id": "a0c384037d6b84313a41b31d147afbbd413bccc0",
+          "message": "chore: remove badges",
+          "timestamp": "2026-01-04T11:33:51+01:00",
+          "tree_id": "b405b8256bfbf529cf7fdc1a664c5203b260ba7c",
+          "url": "https://github.com/Dan0xE/BincodeF/commit/a0c384037d6b84313a41b31d147afbbd413bccc0"
+        },
+        "date": 1767523073750,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "inline_decoder_claim_bytes_read",
+            "value": 43815,
+            "range": "± 2278",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1",
+            "value": 46919,
+            "range": "± 265",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (standard)",
+            "value": 54135,
+            "range": "± 474",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (legacy)",
+            "value": 46467,
+            "range": "± 159",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1 decode",
+            "value": 281203,
+            "range": "± 1781",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 decode (legacy)",
+            "value": 277165,
+            "range": "± 970",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u8",
+            "value": 1,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u16",
+            "value": 13837,
+            "range": "± 317",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u32",
+            "value": 15673,
+            "range": "± 50",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u64",
+            "value": 15658,
+            "range": "± 53",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u8",
+            "value": 501,
+            "range": "± 1",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u16",
+            "value": 14777,
+            "range": "± 328",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u32",
+            "value": 16898,
+            "range": "± 92",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u64",
+            "value": 17335,
+            "range": "± 122",
             "unit": "ns/iter"
           }
         ]
