@@ -8,11 +8,8 @@ This fork extends upon version 2.0.1.
 
 <img align="right" src="./logo.svg" />
 
-[![CI](https://github.com/bincode-org/bincode/workflows/CI/badge.svg)](https://github.com/bincode-org/bincode/actions)
-[![](https://img.shields.io/crates/v/bincode.svg)](https://crates.io/crates/bincode)
+[![CI](https://github.com/Dan0xe/BincodeF/workflows/CI/badge.svg)](https://github.com/Dan0xe/BincodeF/actions)
 [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-<!-- [![](https://img.shields.io/badge/bincode-rustc_1.41.1+-lightgray.svg)](https://blog.rust-lang.org/2020/02/27/Rust-1.41.1.html) -->
-[![Matrix](https://img.shields.io/matrix/bincode:matrix.org?label=Matrix%20Chat)](https://matrix.to/#/#bincode:matrix.org)
 
 A compact encoder / decoder pair that uses a binary zero-fluff encoding scheme.
 The size of the encoded object will be the same or smaller than the size that
@@ -112,7 +109,7 @@ maximum size limit. Malicious inputs will fail upon deserialization.
 
 ### What is Bincode's MSRV (minimum supported Rust version)?
 
-Bincode 2.0 has an MSRV of 1.86.0. Any changes to the MSRV are considered a breaking change for semver purposes, except when certain features are enabled. Features affecting MSRV are documented in the crate root.
+Bincode 2.1 has an MSRV of 1.86.0. Any changes to the MSRV are considered a breaking change for semver purposes, except when certain features are enabled. Features affecting MSRV are documented in the crate root.
 
 ### Why does bincode not respect `#[repr(u8)]`?
 
