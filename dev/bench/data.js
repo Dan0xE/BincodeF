@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1767523183812,
+  "lastUpdate": 1767629973225,
   "repoUrl": "https://github.com/Dan0xE/BincodeF",
   "entries": {
     "Rust Benchmark": [
@@ -539,6 +539,114 @@ window.BENCHMARK_DATA = {
             "name": "bufreader_varint_u64",
             "value": 29943,
             "range": "± 5144",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2eefd929e8fd7774c3fc5deb61abe277a65b8dbf",
+          "message": "bump: actions/cache from 4 to 5 (#10)\n\nBumps [actions/cache](https://github.com/actions/cache) from 4 to 5.\n- [Release notes](https://github.com/actions/cache/releases)\n- [Changelog](https://github.com/actions/cache/blob/main/RELEASES.md)\n- [Commits](https://github.com/actions/cache/compare/v4...v5)\n\n---\nupdated-dependencies:\n- dependency-name: actions/cache\n  dependency-version: '5'\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2026-01-05T17:15:40+01:00",
+          "tree_id": "808b1b7019894ea93cf57124f08168c122917795",
+          "url": "https://github.com/Dan0xE/BincodeF/commit/2eefd929e8fd7774c3fc5deb61abe277a65b8dbf"
+        },
+        "date": 1767629972677,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "inline_decoder_claim_bytes_read",
+            "value": 43151,
+            "range": "± 1617",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1",
+            "value": 48319,
+            "range": "± 245",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (standard)",
+            "value": 54623,
+            "range": "± 658",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (legacy)",
+            "value": 47984,
+            "range": "± 315",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1 decode",
+            "value": 286326,
+            "range": "± 3560",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 decode (legacy)",
+            "value": 278772,
+            "range": "± 3314",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u8",
+            "value": 1,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u16",
+            "value": 14164,
+            "range": "± 299",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u32",
+            "value": 15742,
+            "range": "± 50",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u64",
+            "value": 15692,
+            "range": "± 69",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u8",
+            "value": 3476,
+            "range": "± 9",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u16",
+            "value": 14717,
+            "range": "± 54",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u32",
+            "value": 26057,
+            "range": "± 315",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u64",
+            "value": 17276,
+            "range": "± 85",
             "unit": "ns/iter"
           }
         ]
