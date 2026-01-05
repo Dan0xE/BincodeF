@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1767629973225,
+  "lastUpdate": 1767630001450,
   "repoUrl": "https://github.com/Dan0xE/BincodeF",
   "entries": {
     "Rust Benchmark": [
@@ -647,6 +647,114 @@ window.BENCHMARK_DATA = {
             "name": "bufreader_varint_u64",
             "value": 17276,
             "range": "± 85",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "aa2a5208701436aaeb5a640747599a68d92118f0",
+          "message": "bump: actions/upload-artifact from 4 to 6 (#11)\n\nBumps [actions/upload-artifact](https://github.com/actions/upload-artifact) from 4 to 6.\n- [Release notes](https://github.com/actions/upload-artifact/releases)\n- [Commits](https://github.com/actions/upload-artifact/compare/v4...v6)\n\n---\nupdated-dependencies:\n- dependency-name: actions/upload-artifact\n  dependency-version: '6'\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2026-01-05T17:15:56+01:00",
+          "tree_id": "8bc074f8834bf8d33fbb93312cab4f1e91d54b32",
+          "url": "https://github.com/Dan0xE/BincodeF/commit/aa2a5208701436aaeb5a640747599a68d92118f0"
+        },
+        "date": 1767630000926,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "inline_decoder_claim_bytes_read",
+            "value": 43211,
+            "range": "± 213",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1",
+            "value": 47544,
+            "range": "± 272",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (standard)",
+            "value": 53811,
+            "range": "± 315",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 (legacy)",
+            "value": 46214,
+            "range": "± 696",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v1 decode",
+            "value": 277732,
+            "range": "± 1214",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bench v2 decode (legacy)",
+            "value": 276200,
+            "range": "± 1473",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u8",
+            "value": 1,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u16",
+            "value": 14053,
+            "range": "± 312",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u32",
+            "value": 15603,
+            "range": "± 414",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "slice_varint_u64",
+            "value": 15652,
+            "range": "± 33",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u8",
+            "value": 3146,
+            "range": "± 7",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u16",
+            "value": 14705,
+            "range": "± 59",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u32",
+            "value": 17096,
+            "range": "± 88",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "bufreader_varint_u64",
+            "value": 17745,
+            "range": "± 126",
             "unit": "ns/iter"
           }
         ]
